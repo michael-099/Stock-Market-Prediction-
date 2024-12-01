@@ -17,12 +17,12 @@ end = '2023-12-01'
 tesla_data = yf.download('TSLA', start=start, end=end)
 
 
-last_5_prices = tesla_data['Close'].tail(100).values
+last_hundred = tesla_data['Close'].tail(100).values
 def predict_price():
     print("\n=== Tesla Stock Price Prediction ===")
 
     try:
-        input_data = last_5_prices.reshape(-1, 1)
+        input_data = last_hundred.reshape(-1, 1)
         input_scaled = scaler.fit_transform(input_data)
         input_scaled = np.reshape(input_scaled, (1, input_scaled.shape[0], 1))  
 
