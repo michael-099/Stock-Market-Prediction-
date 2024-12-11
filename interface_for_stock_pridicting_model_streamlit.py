@@ -10,7 +10,7 @@ from tensorflow.keras.models import load_model
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-model = load_model('tesla_stock_price_prediction_model.keras')
+model = load_model('stock_price_prediction_model.keras')
 
 
 scaler = MinMaxScaler(feature_range=(0, 1))
