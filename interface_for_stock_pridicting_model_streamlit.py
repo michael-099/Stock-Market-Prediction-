@@ -25,7 +25,7 @@ def fetch_data():
 def prepare_data(tesla_data, prediction_days=100):
     scaled_data = scaler.fit_transform(tesla_data[['Close']].values)
     model_inputs = scaled_data[-prediction_days:]
-    model_inputs = np.reshape(model_inputs, (1, model_inputs.shape[0], 2))
+    # model_inputs = np.reshape(model_inputs, (1, model_inputs.shape[0], 2))
     return model_inputs
 
 
