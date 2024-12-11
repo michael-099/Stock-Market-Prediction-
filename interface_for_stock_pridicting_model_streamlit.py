@@ -18,7 +18,7 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 
 def fetch_data():
     today = dt.datetime.today()
-    start_date = (today - dt.timedelta(days=200)).strftime('%Y-%m-%d')
+    start_date = dt.datetime(2024, 1, 1)  # Start date is January 1, 2024
     tesla_data = yf.download('TSLA', start=start_date, end=today.strftime('%Y-%m-%d'))
     return tesla_data
 
