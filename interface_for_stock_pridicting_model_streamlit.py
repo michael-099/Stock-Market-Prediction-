@@ -16,25 +16,21 @@ model = load_model('stock_price_prediction_model.keras')
 scaler = MinMaxScaler(feature_range=(0, 1))
 
 
-def fetch_data():
-    today = dt.datetime.today()
-    start_date = dt.datetime(2024, 1, 1)  # Start date is January 1, 2024
-    tesla_data = yf.download('TSLA', start=start_date, end=today.strftime('%Y-%m-%d'))
+def fetch_data(start_date, end_date):
+    tesla_data = yf.download('TSLA', start=start_date, end=end_date)
     return tesla_data
 
 def prepare_data(tesla_data, prediction_days=100):
     scaled_data = scaler.fit_transform(tesla_data[['Close']].values)
     model_inputs = scaled_data[-prediction_days:]
-    # model_inputs = np.reshape(model_inputs, (1, model_inputs.shape[0], 2))
     return model_inputs
 
 
-def predict_tomorrow():
-    tesla_data = fetch_data()
+def predict_for_date(start_date, end_date):
+    tesla_data = fetch_data(start_date, end_date)
     model_inputs = prepare_data(tesla_data)
 
     predicted_price = model.predict(model_inputs)
-
 
     predicted_price = scaler.inverse_transform(
         np.concatenate((predicted_price, np.zeros_like(predicted_price)), axis=1)
@@ -44,14 +40,19 @@ def predict_tomorrow():
 
 def app():
     st.title("📈 Tesla Stock Price Prediction")
-    st.write("Predict Tesla's stock price for the next trading day using machine learning!")
+    st.write("Predict Tesla's stock price for a specific date using machine learning!")
 
-    if st.button("🔍 Predict Next Day's Price"):
+    # Date input for prediction
+    input_date = st.date_input("Enter a date", dt.datetime.today())
+
+    if st.button("🔍 Predict Stock Price for Selected Date"):
         with st.spinner("Fetching data and making predictions..."):
             try:
-               
-                predicted_price = predict_tomorrow()
-                st.success(f"🚀 Predicted Tesla stock price for tomorrow: **${predicted_price:.2f}**")
+                start_date = dt.datetime(2024, 1, 1)
+                end_date = input_date.strftime('%Y-%m-%d')
+
+                predicted_price = predict_for_date(start_date, end_date)
+                st.success(f"🚀 Predicted Tesla stock price for {input_date}: **${predicted_price:.2f}**")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
 
