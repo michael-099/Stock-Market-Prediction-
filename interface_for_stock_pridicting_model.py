@@ -31,7 +31,6 @@ def predict_tomorrow():
     tesla_data = fetch_data()
     model_inputs = prepare_data(tesla_data)
 
-
     predicted_price = model.predict(model_inputs)
     predicted_price = scaler.inverse_transform(np.concatenate((predicted_price, np.zeros_like(predicted_price)), axis=1))[:, 0]
 
